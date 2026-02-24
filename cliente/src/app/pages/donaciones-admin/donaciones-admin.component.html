@@ -1,0 +1,103 @@
+<div class="container mt-5">
+    <h2>Donaciones registradas</h2>
+    <table class="table table-bordered table-striped mt-3" *ngIf="donaciones.length > 0">
+      <thead>
+        <tr>
+          <th>Id</th>
+          <th>Id donador</th>
+          <th>Donador</th>
+          <th>Fecha</th>
+          <th>Monto</th>
+          <th>Forma</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let donacion of donaciones">
+          <td>{{ donacion.id }}</td>
+          <td>{{ donacion.id_donador }}</td>
+          <td>{{ donacion.nombre_donador }}</td>
+          <td>{{ donacion.fecha_donacion }}</td>
+          <td>{{ donacion.monto_donacion }}</td>
+          <td>{{ donacion.forma_donacion }}</td>
+          <td>
+            <div class="container d-flex">
+            <div class="row">
+            <button class="btn btn-primary col" (click)="deleteDonacion(donacion.id)">Eliminar</button>
+            <button class="btn btn-secondary col" (click)="editDonacion(donacion)">Editar</button>
+          </div>
+        </div>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="container mt-5">
+    <h2>
+        {{
+            newDonacion.id
+                ? "Actualizar donacion"
+                : "Registrar nueva donacion"
+        }}
+    </h2>
+    <form (ngSubmit)="onSubmit()" #donacionForm="ngForm">     
+        <div class="mb-3">
+            <label for="id_donador" class="form-label">Id donador</label>
+            <input
+                type="text"
+                class="form-control"
+                id="id_donador"
+                required
+                [(ngModel)]="newDonacion.id_donador"
+                name="id_donador"
+            />
+        </div>
+        <div class="mb-3">
+            <label for="fecha_donacion" class="form-label"
+                >Fecha de donación</label
+            >
+            <input
+            type="date"
+            class="form-control"
+            id="fecha_donacion"
+            required
+            [(ngModel)]="newDonacion.fecha_donacion"
+            name="fecha_donacion"
+        />
+        </div>
+        <div class="mb-3">
+            <label for="monto_donacion" class="form-label"
+                >Monto</label
+            >
+            <textarea
+                class="form-control"
+                id="monto_donacion"
+                required
+                [(ngModel)]="newDonacion.monto_donacion"
+                name="monto_donacion"
+            ></textarea>
+        </div>
+         <div class="mb-3">
+            <label for="forma_donacion" class="form-label"
+                >Forma</label
+            >
+            <select class="form-select" name="forma" id="forma" required [(ngModel)]="newDonacion.forma_donacion">
+                <option value="tarjeta">Tarjeta</option>
+                <option value="efectivo">Efectivo</option>
+                <option value="transferencia">Transferencia</option>
+            </select>
+        </div>
+        <div class="d-grid gap-3 d-md-flex justify-content-md-end">
+            <button
+                type="button"
+                class="btn btn-secondary"
+                (click)="cancelEdit()"
+            >
+                Cancelar
+            </button>
+            <button type="submit" class="btn btn-primary">
+                {{ newDonacion.id ? "Actualizar" : "Registrar" }}
+            </button>
+        </div>
+    </form>
+</div>

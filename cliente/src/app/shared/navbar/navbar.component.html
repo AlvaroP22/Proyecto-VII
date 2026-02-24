@@ -1,0 +1,96 @@
+<nav class="navbar navbar-expand-lg navbar-dark">
+  <div class="container-fluid">
+    <img
+      src="https://live.staticflickr.com/65535/54935397554_4fc138eb97_w.jpg"
+      alt="Logo"
+      width="45"
+      class="d-inline-block align-text-top"
+    />
+    <a class="navbar-brand ms-2" routerLink="/" routerLinkActive="active"
+      >Riviera Rescue</a
+    >
+
+    <div class="collapse navbar-collapse">
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/" routerLinkActive="active"
+            >Inicio</a
+          >
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/mascotas" routerLinkActive="active"
+            >Mascotas</a
+          >
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/donar" routerLinkActive="active"
+            >Donar</a
+          >
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/faq" routerLinkActive="active"
+            >FAQ</a
+          >
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/contacto" routerLinkActive="active"
+            >Contacto</a
+          >
+        </li>
+
+        <div *ngIf="isAuthenticated() && isAdmin()">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+              <a
+                class="nav-link"
+                routerLink="/adopciones"
+                routerLinkActive="active"
+                >Adopciones</a
+              >
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link"
+                routerLink="/donaciones"
+                routerLinkActive="active"
+                >Donaciones</a
+              >
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link"
+                routerLink="/usuarios"
+                routerLinkActive="active"
+                >Usuarios</a
+              >
+            </li>
+          </ul>
+        </div>
+        <button
+          class="btn btn-light"
+          (click)="logout()"
+          *ngIf="isAuthenticated()"
+        >
+          Cerrar sesión
+        </button>
+      </ul>
+    </div>
+    <div class="ms-auto d-flex align-items-center">
+      <ul class="navbar-nav ms-auto" *ngIf="!isAuthenticated()">
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/login" routerLinkActive="active"
+            >Login</a
+          >
+        </li>
+        <button
+          type="button"
+          class="btn btn-light"
+          routerLink="/registro"
+          routerLinkActive="active"
+        >
+          Registrarse
+        </button>
+      </ul>
+    </div>
+  </div>
+</nav>

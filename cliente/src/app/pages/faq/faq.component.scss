@@ -1,0 +1,14 @@
+$purple: #6f42c1;
+
+.btn-primary {
+    background-color: $purple;
+    color: white;
+    border: none;
+    &:hover {
+        background-color: darken($purple, 10%);
+    }
+}
+
+.info-card {
+    border: 3px solid $purple;
+}

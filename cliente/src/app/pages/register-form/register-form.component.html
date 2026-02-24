@@ -1,0 +1,51 @@
+<div class="container mt-5" style="max-width: 600px;">
+  <h2 class="mb-4 text-center">Registro de Nuevo Usuario</h2>
+  <form (ngSubmit)="onSubmit()" #registerForm="ngForm">
+    <div class="mb-3">
+      <label for="nombre" class="form-label">Nombre</label>
+      <input
+        id="nombre"
+        type="text"
+        name="nombre"
+        [(ngModel)]="newRegistro.nombre"
+        class="form-control"
+        required
+      />
+    </div>
+    <div class="mb-3">
+      <label for="email" class="form-label">Correo Electrónico</label>
+      <input
+        id="email"
+        type="email"
+        name="email"
+        [(ngModel)]="newRegistro.email"
+        class="form-control"
+        required
+      />
+    </div>
+    <div class="mb-3">
+      <label for="password" class="form-label">Contraseña</label>
+      <input
+        id="password"
+        type="password"
+        name="password"
+        [(ngModel)]="newRegistro.password"
+        class="form-control"
+        required
+      />
+    </div>
+    <div class="mb-3">
+      <label for="confirmPassword" class="form-label">Confirmar Contraseña</label>
+      <input
+        id="confirmPassword"
+        type="password"
+        name="confirmPassword"
+        [(ngModel)]="confirmPassword"
+        class="form-control"
+        required
+      />
+    </div>
+    <div class="text-danger" *ngIf="passwordError">{{ passwordError }}</div>
+    <button type="submit" class="btn btn-primary w-100">Registrar</button>
+  </form>
+</div>

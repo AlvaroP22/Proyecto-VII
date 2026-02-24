@@ -1,0 +1,97 @@
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-8 col-lg-6">
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <h2 class="text-center mb-4">Contáctanos</h2>
+          <p class="text-muted text-center mb-4">¿Tienes alguna pregunta o comentario? Estamos aquí para ayudarte.</p>
+          
+          <form (ngSubmit)="onSubmit()" #contactForm="ngForm">
+            <div class="mb-3">
+              <label for="nombre" class="form-label">Nombre completo</label>
+              <input 
+                type="text" 
+                class="form-control" 
+                id="nombre" 
+                name="nombre" 
+                [(ngModel)]="contactData.nombre" 
+                required>
+            </div>
+
+            <div class="mb-3">
+              <label for="email" class="form-label">Correo electrónico</label>
+              <input 
+                type="email" 
+                class="form-control" 
+                id="email" 
+                name="email" 
+                [(ngModel)]="contactData.email" 
+                required 
+                email>
+            </div>
+
+            <div class="mb-3">
+              <label for="telefono" class="form-label">Teléfono (opcional)</label>
+              <input 
+                type="tel" 
+                class="form-control" 
+                id="telefono" 
+                name="telefono" 
+                [(ngModel)]="contactData.telefono">
+            </div>
+
+            <div class="mb-3">
+              <label for="asunto" class="form-label">Asunto</label>
+              <select 
+                class="form-select" 
+                id="asunto" 
+                name="asunto" 
+                [(ngModel)]="contactData.asunto" 
+                required>
+                <option value="">Selecciona un asunto</option>
+                <option value="adopcion">Información sobre adopción</option>
+                <option value="donacion">Información sobre donaciones</option>
+                <option value="voluntariado">Voluntariado</option>
+                <option value="otro">Otro</option>
+              </select>
+            </div>
+
+            <div class="mb-4">
+              <label for="mensaje" class="form-label">Mensaje</label>
+              <textarea 
+                class="form-control" 
+                id="mensaje" 
+                name="mensaje" 
+                [(ngModel)]="contactData.mensaje" 
+                rows="5" 
+                required></textarea>
+            </div>
+
+            <div class="d-grid">
+              <button 
+                type="submit" 
+                class="btn btn-primary"
+                [disabled]="!contactForm.form.valid">
+                Enviar mensaje
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <div class="card mt-4 shadow-sm">
+        <div class="card-body">
+          <h3 class="h5 mb-3">Información de contacto</h3>
+          <div class="d-flex align-items-center mb-2">
+            <i class="bi bi-geo-alt me-2"></i>
+            <span>Leona Vicario, Puerto Morelos, Mexico</span>
+          </div>
+          <div class="d-flex align-items-center mb-2">
+            <i class="bi bi-email me-2"></i>
+            <span>rivierarescue&#64;gmail.com</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

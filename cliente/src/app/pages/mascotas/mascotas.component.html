@@ -1,0 +1,165 @@
+<div class="container mt-5">
+  <h2 class="mb-4">Listos para adopción</h2>
+  <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4" *ngIf="mascotas.length > 0">
+    <div class="col" *ngFor="let mascota of mascotas">
+      <div class="card h-100 shadow-sm">
+        <img [src]="mascota.foto" class="card-img-top" alt="Foto de {{ mascota.nombre }}" style="height: 350px; object-fit: cover;">
+        <div class="card-body">
+          <h5 class="card-title">{{ mascota.nombre }}</h5>
+          <div class="card-text">
+            <p class="mb-1" *ngIf="isAuthenticated() && isAdmin()"><strong>ID:</strong> {{ mascota.id }}</p>
+            <p class="mb-1"><strong>Talla:</strong> {{ mascota.talla }}</p>
+            <p class="mb-1"><strong>Sexo:</strong> {{ mascota.sexo }}</p>
+            <p class="mb-1"><strong>Edad:</strong> {{ mascota.edad }}</p>
+            <p class="mb-1"><strong>Estado de Salud:</strong> {{ mascota.estado_salud }}</p>
+            <p class="mb-1"><strong>Descripción:</strong></p>
+            <p class="text-muted">{{ mascota.descripcion }}</p>
+            <p class="mb-1" *ngIf="isAuthenticated() && isAdmin()"><strong>Status:</strong> {{ mascota.status }}</p>
+          </div>
+        </div>
+        <div class="card-footer bg-transparent">
+          <div class="d-grid gap-2" *ngIf="!isAuthenticated() || !isAdmin()">
+            <button class="btn btn-primary" (click)="adoptarMascota(mascota)">Adoptar</button>
+          </div>
+        
+          <div class="d-grid gap-2" *ngIf="isAuthenticated() && isAdmin()">
+            <button class="btn btn-primary" (click)="editMascota(mascota)">Editar</button>
+            <button class="btn btn-secondary" (click)="deleteMascota(mascota.id)">Eliminar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container mt-5" *ngIf="isAuthenticated() && isAdmin()">
+  <h2>{{newMascota.id ? 'Actualizar mascota' : 'Registrar nueva mascota' }}</h2>
+  <form (ngSubmit)="onSubmit()" #mascotaForm="ngForm">
+    <div class="mb-3">
+      <label for="foto" class="form-label">Foto</label>
+      <input type="text" class="form-control" id="foto" required [(ngModel)]="newMascota.foto" name="foto">
+    </div>
+    <div class="mb-3">
+      <label for="nombre" class="form-label">Nombre</label>
+      <input type="text" class="form-control" id="nombre" required [(ngModel)]="newMascota.nombre" name="nombre">
+    </div>
+    <div class="mb-3">
+      <label for="talla" class="form-label">Talla</label>
+      <input type="text" class="form-control" id="talla" required [(ngModel)]="newMascota.talla" name="talla">
+    </div>
+    <div class="mb-3">
+      <label for="edad" class="form-label">Edad</label>
+      <input type="text" class="form-control" id="edad" required [(ngModel)]="newMascota.edad" name="edad">
+    </div>
+    <div class="mb-3">
+      <label for="estado_salud" class="form-label">Estado de Salud</label>
+      <input type="text" class="form-control" id="estado_salud" required [(ngModel)]="newMascota.estado_salud" name="estado_salud">
+    </div>
+    <div class="mb-3">
+      <label for="descripcion" class="form-label">Descripción</label>
+      <textarea class="form-control" id="descripcion" required [(ngModel)]="newMascota.descripcion" name="descripcion"></textarea>
+    </div>
+    <div class="mb-3">
+      <label for="status" class="form-label">Status</label>
+      <input type="text" class="form-control" id="status" required [(ngModel)]="newMascota.status" name="status">
+    </div>
+    <div class="d-grid gap-3 d-md-flex justify-content-md-end">
+      <button type="button" class="btn btn-secondary" (click)="cancelEdit()">Cancelar</button>
+      <button type="submit" class="btn btn-primary">{{newMascota.id ? 'Actualizar' : 'Registrar'}}</button>
+    </div>
+  </form>
+</div>
+
+<div
+  class="modal fade"
+  id="incompleteDataModal"
+  tabindex="-1"
+  aria-labelledby="incompleteDataModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content shadow-lg rounded-3">
+      <!-- Encabezado -->
+      <div class="modal-header bg-light">
+        <h5 class="modal-title fw-semibold" id="incompleteDataModalLabel">
+          Datos incompletos
+        </h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Cerrar"
+        ></button>
+      </div>
+
+      <form (ngSubmit)="onSubmitModal()" #usuarioForm="ngForm">
+        <div class="modal-body" style="max-height: 70vh; overflow-y: auto;">
+          <p class="mb-3">
+            Debes completar tu dirección y contacto antes de solicitar la adopción.
+          </p>
+
+          <div class="mb-3">
+            <label for="nombre" class="form-label">Nombre</label>
+            <input
+              type="text"
+              class="form-control"
+              id="nombre"
+              required
+              [(ngModel)]="newUsuario.nombre"
+              name="nombre"
+            />
+          </div>
+
+          <div class="mb-3">
+            <label for="email" class="form-label">Email</label>
+            <input
+              type="text"
+              class="form-control"
+              id="email"
+              [(ngModel)]="newUsuario.email"
+              name="email"
+            />
+          </div>
+
+          <div class="mb-3">
+            <label for="direccion" class="form-label">Dirección</label>
+            <input
+              type="text"
+              class="form-control"
+              id="direccion"
+              [(ngModel)]="newUsuario.direccion"
+              name="direccion"
+            />
+          </div>
+
+          <div class="mb-3">
+            <label for="contacto" class="form-label">Contacto</label>
+            <input
+              type="text"
+              class="form-control"
+              id="contacto"
+              [(ngModel)]="newUsuario.contacto"
+              name="contacto"
+            />
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button
+            type="button"
+            class="btn btn-outline-secondary"
+            data-bs-dismiss="modal"
+          >
+            Cancelar
+          </button>
+          <button
+            type="submit"
+            class="btn btn-primary"
+          >
+            Actualizar datos
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

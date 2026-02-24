@@ -1,0 +1,22 @@
+$purple: #6f42c1;
+
+.hero-section {
+    background: url("https://live.staticflickr.com/65535/54935361579_cfec16c095_c.jpg") center/cover no-repeat;
+    height: 60vh;
+    backdrop-filter: brightness(0.5);
+  }
+
+.hero-section div {
+    background: rgba(0, 0, 0, 0.45);
+    padding: 40px;
+    border-radius: 12px;
+  }
+
+.btn-primary {
+    background-color: $purple;
+    color: white;
+    border: none;
+    &:hover {
+        background-color: darken($purple, 10%);
+    }
+}

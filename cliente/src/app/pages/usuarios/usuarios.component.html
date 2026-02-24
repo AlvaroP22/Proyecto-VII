@@ -1,0 +1,140 @@
+<div class="container mt-5">
+  <h2>Usuarios registrados</h2>
+  <table
+    class="table table-bordered table-striped mt-3"
+    *ngIf="usuarios.length > 0"
+  >
+    <thead>
+      <tr>
+        <th>Id</th>
+        <th>Nombre</th>
+        <th>email</th>
+        <th>Dirección</th>
+        <th>Contacto</th>
+        <th>Rol</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let usuario of usuarios">
+        <td>{{ usuario.id }}</td>
+        <td>{{ usuario.nombre }}</td>
+        <td>{{ usuario.email }}</td>
+        <td>{{ usuario.direccion }}</td>
+        <td>{{ usuario.contacto }}</td>
+        <td>{{ usuario.rol }}</td>
+        <td>
+          <div class="container d-flex">
+            <div class="row">
+              <button
+                class="btn btn-primary col"
+                (click)="deleteUsuario(usuario.id)"
+              >
+                Eliminar
+              </button>
+              <button
+                class="btn btn-secondary col"
+                (click)="editUsuario(usuario)"
+              >
+                Editar
+              </button>
+            </div>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="container mt-5">
+  <h2>
+    {{ newUsuario.id ? "Actualizar usuario" : "Registrar nuevo usuario" }}
+  </h2>
+  <form (ngSubmit)="onSubmit()" #usuarioForm="ngForm">
+    <div class="mb-3">
+      <label for="nombre" class="form-label">Nombre</label>
+      <input
+        type="text"
+        class="form-control"
+        id="nombre"
+        required
+        [(ngModel)]="newUsuario.nombre"
+        name="nombre"
+      />
+    </div>
+    <div class="mb-3">
+      <label for="email" class="form-label">email</label>
+      <input
+        type="text"
+        class="form-control"
+        id="email"
+        required
+        [(ngModel)]="newUsuario.email"
+        name="email"
+      />
+    </div>
+    <div class="mb-3">
+      <label for="direccion" class="form-label">Dirección</label>
+      <input
+        type="text"
+        class="form-control"
+        id="direccion"
+        [(ngModel)]="newUsuario.direccion"
+        name="direccion"
+      />
+    </div>
+    <div class="mb-3">
+      <label for="contacto" class="form-label">Contacto</label>
+      <input
+        type="text"
+        class="form-control"
+        id="contacto"
+        [(ngModel)]="newUsuario.contacto"
+        name="contacto"
+      />
+    </div>
+    <div class="mb-3">
+      <label for="password" class="form-label">Password</label>
+      <input
+        type="password"
+        class="form-control"
+        id="password"
+        required
+        [(ngModel)]="newUsuario.password"
+        name="password"
+      />
+    </div>
+    <div class="mb-3">
+      <label for="confirmPassword" class="form-label">Confirmar Password</label>
+      <input
+        type="password"
+        class="form-control"
+        id="confirmPassword"
+        required
+        [(ngModel)]="confirmPassword"
+        name="confirmPassword"
+      />
+    </div>
+    <div class="mb-3">
+      <label for="rol" class="form-label">Rol</label>
+      <select
+        class="form-select"
+        id="rol"
+        required
+        [(ngModel)]="newUsuario.rol"
+        name="rol"
+      >
+        <option value="guest">Guest</option>
+        <option value="admin">Admin</option>
+      </select>
+    </div>
+    <div class="d-grid gap-3 d-md-flex justify-content-md-end">
+      <button type="button" class="btn btn-secondary" (click)="cancelEdit()">
+        Cancelar
+      </button>
+      <button type="submit" class="btn btn-primary">
+        {{ newUsuario.id ? "Actualizar" : "Registrar" }}
+      </button>
+    </div>
+  </form>
+</div>

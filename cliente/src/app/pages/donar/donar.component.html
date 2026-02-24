@@ -1,0 +1,198 @@
+<div class="container mt-4">
+  <div class="row justify-content-center">
+    <div class="col-md-10">
+      <div class="card shadow-sm">
+        <div class="card-body text-center">
+          <h2 class="card-title mb-4">Ayúdanos a seguir salvando vidas</h2>
+
+          <img src="https://live.staticflickr.com/65535/54935320633_1475f34e71_c.jpg" 
+          alt="Rescate de mascotas" 
+          class="img-fluid mb-4">
+          
+          <div class="card-text mb-4" *ngIf="!activePaymentMethod">
+            <p class="lead">
+              En Riviera Rescue, cada donación marca la diferencia en la vida de nuestros amigos peludos. Tu apoyo nos permite:
+            </p>
+            
+            <div class="row mt-4 mb-4 fs-6 text-info">
+              <div class="col-md-4">
+                <div class="d-flex flex-column align-items-center">
+                  <i class="bi bi-heart-pulse fs-1 text-primary mb-2"></i>
+                  <p class="color-purple">Brindar atención médica y vacunas</p>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="d-flex flex-column align-items-center">
+                  <i class="bi bi-house-heart fs-1 text-primary mb-2"></i>
+                  <p>Mantener nuestro refugio</p>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="d-flex flex-column align-items-center">
+                  <i class="bi bi-egg-fried fs-1 text-primary mb-2"></i>
+                  <p>Proporcionar alimento y cuidados</p>
+                </div>
+              </div>
+            </div>
+
+            <p class="mb-4">
+              Tu generosidad nos permite continuar nuestra misión de rescatar, rehabilitar y encontrar hogares amorosos para mascotas abandonadas.
+            </p>
+          </div>
+
+          <div *ngIf="activePaymentMethod === 'card'" class="mt-4">
+            <h4 class="mb-4">Donación con Tarjeta</h4>
+            <form (ngSubmit)="processCardPayment()" class="text-start">
+              <div class="mb-3">
+                <label for="cardNumber" class="form-label">Número de Tarjeta</label>
+                <input type="text" class="form-control" id="cardNumber" [(ngModel)]="cardData.cardNumber" name="cardNumber" required>
+              </div>
+              <div class="row mb-3">
+                <div class="col">
+                  <label for="expiryDate" class="form-label">Fecha de Expiración</label>
+                  <input type="text" class="form-control" id="expiryDate" placeholder="MM/AA" [(ngModel)]="cardData.expiryDate" name="expiryDate" required>
+                </div>
+                <div class="col">
+                  <label for="cvv" class="form-label">CVV</label>
+                  <input type="text" class="form-control" id="cvv" [(ngModel)]="cardData.cvv" name="cvv" required>
+                </div>
+              </div>
+              <div class="mb-3">
+                <label for="name" class="form-label">Nombre en la Tarjeta</label>
+                <input type="text" class="form-control" id="name" [(ngModel)]="cardData.name" name="name" required>
+              </div>
+              <div class="mb-4">
+                <label for="amount" class="form-label">Monto a Donar (MXN)</label>
+                <input type="number" class="form-control" id="amount" [(ngModel)]="cardData.amount" name="amount" required>
+              </div>
+              <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                <button type="button" class="btn btn-secondary" (click)="cancelPayment()">Cancelar</button>
+                <button type="submit" class="btn btn-primary">Donar</button>
+              </div>
+            </form>
+          </div>
+
+          <div *ngIf="activePaymentMethod === 'paypal'" class="mt-4">
+            <h4 class="mb-4">Donación con PayPal</h4>
+            <p>Serás redirigido a PayPal para completar tu donación de forma segura.</p>
+            <div class="d-grid gap-2 d-md-flex justify-content-md-center mt-4">
+              <button type="button" class="btn btn-secondary" (click)="cancelPayment()">Cancelar</button>
+              <button type="button" class="btn btn-primary" (click)="processPaypalPayment()">
+                Continuar a PayPal
+              </button>
+            </div>
+          </div>
+
+          <div *ngIf="activePaymentMethod === 'bank'" class="mt-4">
+            <h4 class="mb-4">Datos para Transferencia Bancaria</h4>
+            <div class="card">
+              <div class="card-body">
+                <div class="row mb-3">
+                  <div class="col-md-4 text-md-end"><strong>Banco:</strong></div>
+                  <div class="col-md-8 text-md-start">
+                    {{ bankData.banco }}
+    
+                    <button class="btn btn-sm ms-2" (click)="copyToClipboard(bankData.banco)">
+                      <i class="bi bi-clipboard"></i>
+                      <img src="assets/clipboard.png" alt="Clipboard" width="20" height="20">
+                    </button>
+                  </div>
+                </div>
+                <div class="row mb-3">
+                  <div class="col-md-4 text-md-end"><strong>Número de Cuenta:</strong></div>
+                  <div class="col-md-8 text-md-start">
+                    {{ bankData.cuenta }}
+                    <button class="btn btn-sm ms-2" (click)="copyToClipboard(bankData.cuenta)">
+                      <i class="bi bi-clipboard"></i>
+                      <img src="assets/clipboard.png" alt="Clipboard" width="20" height="20">
+                    </button>
+                  </div>
+                </div>
+                <div class="row mb-3">
+                  <div class="col-md-4 text-md-end"><strong>Tarjeta:</strong></div>
+                  <div class="col-md-8 text-md-start">
+                    {{ bankData.tarjeta }}
+                    <button class="btn btn-sm ms-2" (click)="copyToClipboard(bankData.tarjeta)">
+                      <i class="bi bi-clipboard"></i>
+                      <img src="assets/clipboard.png" alt="Clipboard" width="20" height="20">
+                    </button>
+                  </div>
+                </div>
+                <div class="row mb-3">
+                  <div class="col-md-4 text-md-end"><strong>CLABE:</strong></div>
+                  <div class="col-md-8 text-md-start">
+                    {{ bankData.clabe }}
+                    <button class="btn btn-sm ms-2" (click)="copyToClipboard(bankData.clabe)">
+                      <i class="bi bi-clipboard"></i>
+                      <img src="assets/clipboard.png" alt="Clipboard" width="20" height="20">
+                    </button>
+                  </div>
+                </div>
+                <div class="row mb-3">
+                  <div class="col-md-4 text-md-end"><strong>Beneficiario:</strong></div>
+                  <div class="col-md-8 text-md-start">
+                    {{ bankData.beneficiario }}
+                    <button class="btn btn-sm ms-2" (click)="copyToClipboard(bankData.beneficiario)">
+                      <i class="bi bi-clipboard"></i>
+                      <img src="assets/clipboard.png" alt="Clipboard" width="20" height="20">
+                    </button>
+                  </div>
+                </div>
+                <div class="row mb-3">
+                  <div class="col-md-4 text-md-end"><strong>Referencia:</strong></div>
+                  <div class="col-md-8 text-md-start">
+                    {{ bankData.referencia }}
+                    <button class="btn btn-sm ms-2" (click)="copyToClipboard(bankData.referencia)">
+                      <i class="bi bi-clipboard"></i>
+                      <img src="assets/clipboard.png" alt="Clipboard" width="20" height="20">
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="mt-4">
+              <button type="button" class="btn btn-secondary" (click)="cancelPayment()">Regresar</button>
+            </div>
+          </div>
+
+          <div class="border-top pt-4" *ngIf="!activePaymentMethod">
+            <h4 class="mb-4">Elige tu método de donación preferido</h4>
+            
+            <div class="d-grid gap-3 d-md-flex justify-content-md-center">
+              <button class="btn btn-primary btn-lg" (click)="showPaymentMethod('card')">
+                <i class="bi bi-credit-card me-2"></i>
+                Tarjeta de Crédito/Débito
+              </button>
+
+              <button class="btn btn-primary btn-lg" (click)="showPaymentMethod('paypal')">
+                <i class="bi bi-paypal me-2"></i>
+                PayPal
+              </button>
+
+              <button class="btn btn-primary btn-lg" (click)="showPaymentMethod('bank')">
+                <i class="bi bi-bank me-2"></i>
+                Transferencia Bancaria
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card mt-4 shadow-sm info-card">
+        <div class="card-body">
+          <h5 class="card-title">¿Por qué donar?</h5>
+          <p class="card-text">
+            Cada peso cuenta. Tu donación, sin importar el monto, contribuye directamente al bienestar de nuestros animales rescatados. Nos ayudas a proporcionar:
+          </p>
+          <ul class="list-unstyled">
+            <li><i class="bi bi-check-circle-fill text-success me-2"></i>Atención veterinaria de emergencia</li>
+            <li><i class="bi bi-check-circle-fill text-success me-2"></i>Alimentación y suplementos</li>
+            <li><i class="bi bi-check-circle-fill text-success me-2"></i>Medicamentos y tratamientos</li>
+            <li><i class="bi bi-check-circle-fill text-success me-2"></i>Mantenimiento del refugio</li>
+            <li><i class="bi bi-check-circle-fill text-success me-2"></i>Programas de esterilización</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

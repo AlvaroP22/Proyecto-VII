@@ -1,0 +1,158 @@
+<div class="container mt-5" *ngIf="isAdmin()">
+  <h2>Adopciones registradas</h2>
+  <table
+    class="table table-bordered table-striped mt-3"
+    *ngIf="adopciones.length > 0"
+  >
+    <thead>
+      <tr>
+        <th>Id</th>
+        <th>Mascota</th>
+        <th>Id mascota</th>
+        <th>Adoptante</th>
+        <th>Id adoptante</th>
+        <th>Fecha de solicitud</th>
+        <th>Motivos</th>
+        <th>Fecha de adopción</th>
+        <th>Observaciones</th>
+        <th>Status</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let adopcion of adopciones">
+        <td>{{ adopcion.id }}</td>
+        <td>{{ adopcion.nombre_mascota }}</td>
+        <td>{{ adopcion.id_mascota }}</td>
+        <td>{{ adopcion.nombre_adoptante }}</td>
+        <td>{{ adopcion.id_adoptante }}</td>
+        <td>{{ adopcion.fecha_solicitud | date : "MM/dd/yyyy" }}</td>
+        <td>{{ adopcion.motivos }}</td>
+        <td>{{ adopcion.fecha_adopcion | date : "MM/dd/yyyy" }}</td>
+        <td>{{ adopcion.observaciones }}</td>
+        <td>{{ adopcion.status }}</td>
+        <td>
+          <div class="container d-flex">
+            <div class="row">
+              <button
+                class="btn btn-primary col"
+                (click)="deleteAdopcion(adopcion.id)"
+              >
+                Eliminar
+              </button>
+              <button
+                class="btn btn-secondary col"
+                (click)="editAdopcion(adopcion)"
+              >
+                Editar
+              </button>
+            </div>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="container mt-5">
+  <h2>
+    {{ newAdopcion.id ? "Actualizar adopcion" : "Solicitar adopcion" }}
+  </h2>
+
+  <form (ngSubmit)="onSubmit()" #adopcionForm="ngForm">
+    <div class="mb-3">
+      <label for="id_mascota" class="form-label">Id mascota</label>
+      <input
+        type="text"
+        class="form-control"
+        id="id_mascota"
+        required
+        [(ngModel)]="newAdopcion.id_mascota"
+        name="id_mascota"
+        [readonly]="isFromAdoptButton"
+      />
+    </div>
+    <div class="mb-3">
+      <label for="id_adoptante" class="form-label">Id del adoptante</label>
+      <input
+        type="text"
+        class="form-control"
+        id="id_adoptante"
+        required
+        [(ngModel)]="newAdopcion.id_adoptante"
+        name="id_adoptante"
+        [readonly]="isFromAdoptButton"
+      />
+    </div>
+    <div class="mb-3">
+      <label for="motivos" class="form-label">Motivos</label>
+      <textarea
+        class="form-control"
+        id="motivos"
+        required
+        [(ngModel)]="newAdopcion.motivos"
+        name="motivos"
+      ></textarea>
+    </div>
+
+    <div *ngIf="isAdmin()">
+      <div class="mb-3">
+        <label for="fecha_solicitud" class="form-label"
+          >Fecha de solicitud</label
+        >
+        <input
+          type="date"
+          class="form-control"
+          id="fecha_solicitud"
+          required
+          [(ngModel)]="newAdopcion.fecha_solicitud"
+          name="fecha_solicitud"
+        />
+      </div>
+      <div class="mb-3">
+        <label for="fecha_adopcion" class="form-label">Fecha de adopción</label>
+        <input
+          type="date"
+          class="form-control"
+          id="fecha_adopcion"
+          required
+          [(ngModel)]="newAdopcion.fecha_adopcion"
+          name="fecha_adopcion"
+        />
+      </div>
+      <div class="mb-3">
+        <label for="observaciones" class="form-label">Observaciones</label>
+        <textarea
+          class="form-control"
+          id="observaciones"
+          required
+          [(ngModel)]="newAdopcion.observaciones"
+          name="observaciones"
+        ></textarea>
+      </div>
+      <div class="mb-3">
+        <label for="status" class="form-label">status</label>
+        <select
+          class="form-select"
+          name="status"
+          id="status"
+          required
+          [(ngModel)]="newAdopcion.status"
+          name="status"
+        >
+          <option value="pendiente">Pendiente</option>
+          <option value="aceptada">Aceptada</option>
+          <option value="rechazada">Rechazada</option>
+        </select>
+      </div>
+    </div>
+    <div class="d-grid gap-3 d-md-flex justify-content-md-end">
+      <button type="button" class="btn btn-secondary" (click)="cancelEdit()">
+        Cancelar
+      </button>
+      <button type="submit" class="btn btn-primary">
+        {{ newAdopcion.id ? "Actualizar" : "Enviar" }}
+      </button>
+    </div>
+  </form>
+</div>
