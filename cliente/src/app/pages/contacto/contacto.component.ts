@@ -22,7 +22,14 @@ export class ContactoComponent {
   constructor(private router: Router, private route: ActivatedRoute) {}
 
   onSubmit() {
+
+    // Guardar datos en localStorage
+    const mensajes = JSON.parse(localStorage.getItem('mensajes') || '[]');
+    mensajes.push(this.contactData);
+    localStorage.setItem('mensajes', JSON.stringify(mensajes));
+
     alert('Recibimos tu mensaje, te responderemos lo antes posible');
+
     this.contactData = {
       nombre: '',
       email: '',
@@ -30,6 +37,7 @@ export class ContactoComponent {
       asunto: '',
       mensaje: ''
     };
+
     this.router.navigate(['/contacto']);
   }
 }
