@@ -18,6 +18,10 @@ export class MascotaService {
     return this.http.get<Mascota[]>(this.apiUrl); 
   }
 
+  getMascotaById(id: number, headers: any): Observable<Mascota> {
+    return this.http.get<Mascota>(`${this.apiUrl}/${id}`);
+  }
+
   addMascota(mascota: {
     id:number, 
     foto:string,

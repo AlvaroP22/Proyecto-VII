@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { HomeComponent } from './pages/home/home.component';
 import { LoginComponent } from './pages/login/login.component';
 import { MascotasComponent } from './pages/mascotas/mascotas.component';
+import { MascotaDetailComponent } from './pages/mascota-detail/mascota-detail.component';
 import { ContactoComponent } from './pages/contacto/contacto.component';
 import { authGuard } from './shared/auth/auth.guard';
 import { AdopcionesComponent } from './pages/adopciones/adopciones.component';
@@ -18,6 +19,7 @@ export const routes: Routes = [
     { path: '', component: HomeComponent },
     { path: 'registro', component: RegisterFormComponent },
     { path: 'mascotas', component: MascotasComponent },
+    { path: 'mascota-detail/:id', component: MascotaDetailComponent },
     { path: 'donar', component: DonarComponent },
     { path: 'faq', component: FaqComponent },
     { path: 'contacto', component: ContactoComponent },
