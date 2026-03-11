@@ -1,19 +1,17 @@
 import { Component, OnInit } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { MascotaService } from "../../services/mascotas/mascotas.service";
-import { Router, ActivatedRoute } from "@angular/router";
+import { Router, ActivatedRoute, RouterLink } from "@angular/router";
 import { Mascota } from "../../models/mascota";
 import { FormsModule } from "@angular/forms";
 import { AuthService } from "../../services/auth/auth.service";
 import { AdopcionStateService } from "../../services/adopciones/adopcion-state.service";
 import { UsuarioService } from "../../services/usuarios/usuarios.service";
 
-declare var bootstrap: any;
-
 @Component({
   selector: "app-mascotas",
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, RouterLink],
   templateUrl: "./mascotas.component.html",
   styleUrl: "./mascotas.component.scss",
 })
@@ -110,36 +108,8 @@ export class MascotasComponent implements OnInit {
     return this.authService.isAdmin();
   }
 
-  showModal(user: any): void {
-    const modalElement = document.getElementById("incompleteDataModal");
-    if (modalElement) {
-      this.newUsuario = { ...user };
-      const modal = new bootstrap.Modal(modalElement);
-      modal.show();
-    }
-  }
-
-  adoptarMascota(mascota: Mascota): void {
-    if (this.isAuthenticated()) {
-      this.usuarioService.getCurrentUser().subscribe((user) => {
-        const userId = user ? user.id : null;
-
-        if (userId) {
-          if (user.direccion && user.contacto !== "") {
-            this.adopcionState.setIds(mascota.id, userId);
-            this.router.navigate(["/adopciones"]);
-          } else {
-            this.showModal(user);
-          }
-        } else {
-          this.router.navigate(["/login"]);
-          alert("Debes iniciar sesión para adoptar una mascota.");
-        }
-      });
-    } else {
-      this.router.navigate(["/login"]);
-      alert("Debes iniciar sesión para adoptar una mascota.");
-    }
+  navigateToDetail(id: number): void {
+    this.router.navigate(["/mascota-detail", id]);
   }
 
   deleteMascota(id: number): void {
@@ -200,6 +170,7 @@ export class MascotasComponent implements OnInit {
             status: "",
           };
           this.router.navigate(["/mascotas"]);
+          //Verify this route from the modal, re-route to other page
         },
         (error: any) => {
           console.error("Error al actualizar la mascota", error);
@@ -232,41 +203,6 @@ export class MascotasComponent implements OnInit {
             console.error("Error al añadir la mascota", error);
           },
         });
-    }
-  }
-
-  onSubmitModal(): void {
-    if (!this.newUsuario) return;
-
-    if (this.newUsuario.id) {
-      this.usuarioService
-        .updateUsuario(this.newUsuario.id, this.newUsuario)
-        .subscribe(
-          () => {
-            const index = this.usuarios.findIndex(
-              (m) => m.id === this.newUsuario.id
-            );
-            if (index !== -1) {
-              this.usuarios[index] = { ...this.newUsuario };
-            }
-
-            alert("Datos actualizados correctamente");
-
-            this.newUsuario = {
-              id: 0,
-              nombre: "",
-              email: "",
-              password: "",
-              rol: "",
-              direccion: "",
-              contacto: "",
-            };
-            this.router.navigate(["/mascotas"]);
-          },
-          (error: any) => {
-            console.error("Error al actualizar la usuario", error);
-          }
-        );
     }
   }
 }

@@ -1,0 +1,124 @@
+<div class="container mt-5">
+  <div class="card">
+    <div class="card-body detail-layout">
+      <div class="detail-left">
+        <h1 class="card-title text-info">{{ newMascota.nombre }}</h1>
+        <img [src]="newMascota.foto" class="detail-img" alt="Foto de {{ newMascota.nombre }}">
+      </div>
+      <div class="detail-right mt-5">
+        <div>
+          <p class="card-text"><strong>Descripción:</strong> {{ newMascota.descripcion }}</p>
+          <p class="card-text"><strong>Estado de Salud:</strong> {{ newMascota.estado_salud }}</p>
+          <p class="card-text"><strong>Talla:</strong> {{ newMascota.talla }}</p>
+          <p class="card-text"><strong>Sexo:</strong> {{ newMascota.sexo }}</p>
+          <p class="card-text"><strong>Edad:</strong> {{ newMascota.edad }}</p>
+          <p class="card-text"><strong>Status:</strong> {{ newMascota.status }}</p>
+        </div>
+        <div class="d-grid gap-3 mt-5 d-md-flex justify-content-md-center">
+          <button routerLink="/mascotas" class="btn btn-secondary" routerLinkActive="active">
+            <i class="bi bi-envelope"></i>
+            Regresar
+          </button>
+          <div *ngIf="!isAuthenticated() || !isAdmin()">
+            <button class="btn btn-primary" (click)="adoptarMascota(newMascota)">Adoptame!</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div
+  class="modal fade"
+  id="incompleteDataModal"
+  tabindex="-1"
+  aria-labelledby="incompleteDataModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content shadow-lg rounded-3">
+      
+      <div class="modal-header bg-light">
+        <h5 class="modal-title fw-semibold" id="incompleteDataModalLabel">
+          Datos incompletos
+        </h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Cerrar"
+        ></button>
+      </div>
+
+      <form (ngSubmit)="onSubmitModal()" #usuarioForm="ngForm">
+        <div class="modal-body" style="max-height: 70vh; overflow-y: auto;">
+          <p class="mb-3">
+            Debes completar tu dirección y contacto antes de solicitar la adopción.
+          </p>
+
+          <div class="mb-3">
+            <label for="nombre" class="form-label">Nombre</label>
+            <input
+              type="text"
+              class="form-control"
+              id="nombre"
+              required
+              [(ngModel)]="newUsuario.nombre"
+              name="nombre"
+            />
+          </div>
+
+          <div class="mb-3">
+            <label for="email" class="form-label">Email</label>
+            <input
+              type="text"
+              class="form-control"
+              id="email"
+              [(ngModel)]="newUsuario.email"
+              name="email"
+            />
+          </div>
+
+          <div class="mb-3">
+            <label for="direccion" class="form-label">Dirección</label>
+            <input
+              type="text"
+              class="form-control"
+              id="direccion"
+              [(ngModel)]="newUsuario.direccion"
+              name="direccion"
+            />
+          </div>
+
+          <div class="mb-3">
+            <label for="contacto" class="form-label">Contacto</label>
+            <input
+              type="text"
+              class="form-control"
+              id="contacto"
+              [(ngModel)]="newUsuario.contacto"
+              name="contacto"
+            />
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button
+            type="button"
+            class="btn btn-outline-secondary"
+            data-bs-dismiss="modal"
+          >
+            Cancelar
+          </button>
+          <button
+            type="submit"
+            class="btn btn-primary"
+          >
+            Actualizar datos
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
