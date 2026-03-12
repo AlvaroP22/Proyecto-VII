@@ -7,12 +7,14 @@
       </div>
       <div class="detail-right mt-5">
         <div>
-          <p class="card-text"><strong>Descripción:</strong> {{ newMascota.descripcion }}</p>
+          <p class="mb-1" *ngIf="isAuthenticated() && isAdmin()"><strong>ID:</strong> {{ newMascota.id }}</p>
+          <p class="mb-1" *ngIf="isAuthenticated() && isAdmin()"><strong>Status:</strong> {{ newMascota.status }}</p>
           <p class="card-text"><strong>Estado de Salud:</strong> {{ newMascota.estado_salud }}</p>
           <p class="card-text"><strong>Talla:</strong> {{ newMascota.talla }}</p>
           <p class="card-text"><strong>Sexo:</strong> {{ newMascota.sexo }}</p>
           <p class="card-text"><strong>Edad:</strong> {{ newMascota.edad }}</p>
-          <p class="card-text"><strong>Status:</strong> {{ newMascota.status }}</p>
+          <p class="card-text"><strong>Descripción:</strong></p>
+          <p class="text-muted">{{ newMascota.descripcion }}</p>
         </div>
         <div class="d-grid gap-3 mt-5 d-md-flex justify-content-md-center">
           <button routerLink="/mascotas" class="btn btn-secondary" routerLinkActive="active">

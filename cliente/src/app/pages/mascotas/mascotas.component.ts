@@ -170,7 +170,6 @@ export class MascotasComponent implements OnInit {
             status: "",
           };
           this.router.navigate(["/mascotas"]);
-          //Verify this route from the modal, re-route to other page
         },
         (error: any) => {
           console.error("Error al actualizar la mascota", error);

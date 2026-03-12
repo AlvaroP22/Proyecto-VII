@@ -33,16 +33,16 @@ export class MascotaDetailComponent implements OnInit {
     descripcion: string;
     status: string;
   } = {
-    id: 0,
-    foto: "",
-    nombre: "",
-    talla: "",
-    sexo: "",
-    edad: 0,
-    estado_salud: "",
-    descripcion: "",
-    status: "",
-  };
+      id: 0,
+      foto: "",
+      nombre: "",
+      talla: "",
+      sexo: "",
+      edad: 0,
+      estado_salud: "",
+      descripcion: "",
+      status: "",
+    };
 
   usuarios: any[] = [];
 
@@ -55,14 +55,14 @@ export class MascotaDetailComponent implements OnInit {
     direccion: string;
     contacto: string;
   } = {
-    id: 0,
-    nombre: "",
-    email: "",
-    password: "",
-    rol: "",
-    direccion: "",
-    contacto: "",
-  };
+      id: 0,
+      nombre: "",
+      email: "",
+      password: "",
+      rol: "",
+      direccion: "",
+      contacto: "",
+    };
 
   constructor(
     public data: MascotaService,
@@ -172,6 +172,9 @@ export class MascotaDetailComponent implements OnInit {
               direccion: "",
               contacto: "",
             };
+            const modalElement = document.getElementById('incompleteDataModal');
+            const modalInstance = bootstrap.Modal.getInstance(modalElement);
+            modalInstance.hide();
             this.router.navigate(["/mascotas"]);
           },
           (error: any) => {
