@@ -4,7 +4,7 @@ const db = require('../models/initDB');
 const auth = require('../middleware/auth');
 
 // GET all
-router.get('/', auth, (req, res) => {
+router.get('/', (req, res) => {
   const { talla, edad, status } = req.query;
 
   let query = 'SELECT * FROM mascotas WHERE 1=1';
