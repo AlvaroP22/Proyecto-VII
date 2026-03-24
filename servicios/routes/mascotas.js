@@ -5,7 +5,27 @@ const auth = require('../middleware/auth');
 
 // GET all
 router.get('/', auth, (req, res) => {
-  db.all('SELECT * FROM mascotas', [], (err, rows) => {
+  const { talla, edad, status } = req.query;
+
+  let query = 'SELECT * FROM mascotas WHERE 1=1';
+  let params = [];
+
+  if (talla) {
+    query += ' AND talla = ?';
+    params.push(talla);
+  }
+
+  if (edad) {
+    query += ' AND edad = ?';
+    params.push(edad);
+  }
+
+  if (status) {
+    query += ' AND status = ?';
+    params.push(status);
+  }
+
+  db.all(query, params, (err, rows) => {
     if (err) return res.status(500).send(err.message);
     res.json(rows);
   });
