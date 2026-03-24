@@ -48,7 +48,7 @@ router.post('/', auth, (req, res) => {
 
   db.run(
     `INSERT INTO mascotas (foto, nombre, sexo, talla, edad, estado_salud, descripcion, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-    [foto, nombre, , sexo, talla, edad, estado_salud, descripcion, status],
+    [foto, nombre,  sexo, talla, edad, estado_salud, descripcion, status],
     function (err) {
       if (err) return res.status(500).send(err.message);
       db.get(
