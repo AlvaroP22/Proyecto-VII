@@ -56,7 +56,7 @@ export class ContactoComponent {
     voluntarios.push(this.volunteerData);
     localStorage.setItem('voluntarios', JSON.stringify(voluntarios));
 
-    alert('¡Gracias por registrarte como voluntario!);
+    alert('¡Gracias por registrarte como voluntario!');
 
     this.volunteerData = {
       nombre: '',
