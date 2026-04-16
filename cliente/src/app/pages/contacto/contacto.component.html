@@ -92,6 +92,84 @@
           </div>
         </div>
       </div>
+
+      <!-- 🔽 NUEVO: FORMULARIO DE VOLUNTARIOS -->
+      <div class="card mt-4 shadow-sm">
+        <div class="card-body">
+          <h3 class="h5 mb-3 text-center">Regístrate como voluntario 🐾</h3>
+          <p class="text-muted text-center mb-4">
+            Forma parte de nuestro equipo y ayuda a mejorar la vida de los perritos.
+          </p>
+
+          <form (ngSubmit)="onVolunteerSubmit()" #volunteerForm="ngForm">
+            
+            <div class="mb-3">
+              <label class="form-label">Nombre completo</label>
+              <input 
+                type="text" 
+                class="form-control"
+                name="nombreVol"
+                [(ngModel)]="volunteerData.nombre"
+                required>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Edad</label>
+              <input 
+                type="number" 
+                class="form-control"
+                name="edad"
+                [(ngModel)]="volunteerData.edad"
+                required>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Correo electrónico</label>
+              <input 
+                type="email" 
+                class="form-control"
+                name="emailVol"
+                [(ngModel)]="volunteerData.email"
+                required>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Disponibilidad</label>
+              <select 
+                class="form-select"
+                name="disponibilidad"
+                [(ngModel)]="volunteerData.disponibilidad"
+                required>
+                <option value="">Selecciona una opción</option>
+                <option value="fin_semana">Fines de semana</option>
+                <option value="entre_semana">Entre semana</option>
+                <option value="tiempo_completo">Tiempo completo</option>
+              </select>
+            </div>
+
+            <div class="mb-4">
+              <label class="form-label">¿Por qué quieres ser voluntario?</label>
+              <textarea 
+                class="form-control"
+                rows="4"
+                name="motivo"
+                [(ngModel)]="volunteerData.motivo"
+                required></textarea>
+            </div>
+
+            <div class="d-grid">
+              <button 
+                class="btn btn-success"
+                type="submit"
+                [disabled]="!volunteerForm.form.valid">
+                Registrarme como voluntario
+              </button>
+            </div>
+
+          </form>
+        </div>
+      </div>
+
     </div>
   </div>
 </div>
