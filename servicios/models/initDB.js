@@ -34,7 +34,7 @@ db.serialize(() => {
     fecha_adopcion TEXT,
     observaciones TEXT,
     FOREIGN KEY(id_mascota) REFERENCES mascotas(id),
-    FOREIGN KEY(id_adoptante) REFERENCES adoptantes(id)
+    FOREIGN KEY(id_adoptante) REFERENCES usuarios(id)
   )`);
 
   db.run(`CREATE TABLE IF NOT EXISTS donaciones (
@@ -43,7 +43,7 @@ db.serialize(() => {
     fecha_donacion TEXT,
     monto_donacion INTEGER,
     forma_donacion TEXT,    
-    FOREIGN KEY(id_donador) REFERENCES donadores(id)
+    FOREIGN KEY(id_donador) REFERENCES usuarios(id)
   )`);
 
 });
