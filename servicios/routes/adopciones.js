@@ -97,7 +97,7 @@ router.put("/:id", (req, res) => {
          observaciones = ?,
          status = ?
        WHERE id = ?`,
-        [id_mascota, id_adoptante, fecha_solicitud, motivos, fecha_adopcion, observaciones, status],
+        [id_mascota, id_adoptante, fecha_solicitud, motivos, fecha_adopcion, observaciones, status, id],
         function (err) {
             if (err) return res.status(500).json({ error: err.message });
             res.json({ mensaje: "Adopción actualizada" });
