@@ -16,14 +16,16 @@ CREATE TABLE IF NOT EXISTS mascotas (
     foto TEXT,
     nombre TEXT,
     sexo TEXT
-      CHECK (sexo IN ('macho','hembra')),
-    talla TEXT,
+      CHECK (sexo IN ('Macho','Hembra')),
+    talla TEXT
+      CHECK (talla IN ('Pequeña','Mediana','Grande')),
     edad INTEGER,
     estado_salud TEXT,
+      CHECK (estado_salud IN ('Saludable','Necesita tratamiento','Lesionado')),
     descripcion TEXT,
     status TEXT
-      CHECK (status IN ('disponible','adoptado'))
-      DEFAULT 'disponible'
+      CHECK (status IN ('Disponible','Adoptado'))
+      DEFAULT 'Disponible'
 );
 
 
@@ -38,8 +40,8 @@ CREATE TABLE IF NOT EXISTS adopciones (
     motivos TEXT,
 
     status TEXT
-      CHECK(status IN ('pendiente','aceptada','rechazada'))
-      DEFAULT 'pendiente',
+      CHECK(status IN ('Pendiente','Aceptada','Rechazada'))
+      DEFAULT 'Pendiente',
 
     fecha_adopcion TIMESTAMP,
 
@@ -65,6 +67,7 @@ CREATE TABLE IF NOT EXISTS donaciones (
     monto_donacion INTEGER,
 
     forma_donacion TEXT,
+      CHECK (forma_donacion IN ('Efectivo','Transferencia','Especie')),
 
     CONSTRAINT fk_donador
       FOREIGN KEY(id_donador)

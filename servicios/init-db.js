@@ -7,7 +7,7 @@ async function initDB() {
 
    //const sql = fs.readFileSync('./schema.sql').toString();
 
-   const result = await pool.query('SELECT * FROM mascotas');
+   const result = await pool.query(fs.readFileSync('./schema.sql').toString());
 
    console.log('Tablas creadas correctamente', result.rows);
 
