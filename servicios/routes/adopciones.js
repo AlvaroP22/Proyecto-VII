@@ -1,118 +1,112 @@
 const express = require("express");
 const router = express.Router();
-const db = require("../models/initDB");
+const pool = require("../config/db");
 const auth = require("../middleware/auth");
 
+const SELECT_ADOPCION = `
+  SELECT a.id, a.id_mascota, m.nombre AS nombre_mascota,
+         a.id_adoptante, a.fecha_solicitud, a.motivos,
+         ad.nombre AS nombre_adoptante,
+         a.fecha_adopcion, a.observaciones, a.status
+  FROM adopciones a
+  JOIN mascotas m ON a.id_mascota = m.id
+  JOIN usuarios ad ON a.id_adoptante = ad.id
+`;
+
 // GET all
-router.get("/", auth, (req, res) => {
-    db.all(
-        `SELECT a.id, a.id_mascota, m.nombre AS nombre_mascota,
-                     a.id_adoptante, a.fecha_solicitud, a.motivos, 
-                     ad.nombre AS nombre_adoptante,
-                     a.fecha_adopcion, a.observaciones, a.status
-       FROM adopciones a
-       JOIN mascotas m ON a.id_mascota = m.id
-       JOIN usuarios ad ON a.id_adoptante = ad.id`,
-        [],
-        (err, rows) => {
-            if (err) return res.status(500).json({ error: err.message });
-            res.json(rows);
-        }
-    );
+router.get("/", auth, async (req, res) => {
+  try {
+    const result = await pool.query(SELECT_ADOPCION);
+    res.json(result.rows);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 });
 
 // GET by id
-router.get("/:id", (req, res) => {    
+router.get("/:id", async (req, res) => {
+  try {
     const { id } = req.params;
 
-    db.get(
-        `SELECT a.id, a.id_mascota, m.nombre AS nombre_mascota,
-      a.id_adoptante, a.fecha_solicitud, a.motivos,
-      ad.nombre AS nombre_adoptante,
-      a.fecha_adopcion, a.observaciones, a.status
-      FROM adopciones a
-      JOIN mascotas m ON a.id_mascota = m.id
-      JOIN usuarios ad ON a.id_adoptante = ad.id
-      WHERE a.id = ?`,
-        [id],
-        (err, row) => {
-            if (err) return res.status(500).json({ error: err.message });
-            if (!row)
-                return res
-                    .status(404)
-                    .json({ error: "Adopción no encontrada" });
-            res.json(row);
-        }
+    const result = await pool.query(
+      `${SELECT_ADOPCION} WHERE a.id = $1`,
+      [id]
     );
+
+    if (!result.rows.length) {
+      return res.status(404).json({ error: "Adopción no encontrada" });
+    }
+
+    res.json(result.rows[0]);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 });
 
 // POST
-router.post("/", (req, res) => {
-    const { id_mascota, id_adoptante, motivos } =
-        req.body;
+router.post("/", async (req, res) => {
+  try {
+    const { id_mascota, id_adoptante, motivos } = req.body;
 
     if (!id_mascota || !id_adoptante || !motivos) {
-        return res.status(400).json({ error: "Todos los campos son obligatorios" });
+      return res.status(400).json({ error: "Todos los campos son obligatorios" });
     }
 
-    db.run(
-        `INSERT INTO adopciones (id_mascota, id_adoptante, motivos )
-     VALUES (?, ?, ?)`,
-        [id_mascota, id_adoptante, motivos],
-        function (err) {
-            if (err) return res.status(500).json({ error: err.message });
-            db.get(
-                `SELECT a.id, a.id_mascota, m.nombre AS nombre_mascota,
-      a.id_adoptante, ad.nombre AS nombre_adoptante,
-      a.fecha_solicitud, a.motivos,
-      a.fecha_adopcion, a.observaciones, a.status
-      FROM adopciones a
-      JOIN mascotas m ON a.id_mascota = m.id
-      JOIN usuarios ad ON a.id_adoptante = ad.id
-      WHERE a.id = ?`,
-                [this.lastID],
-                (err, row) => {
-                    if (err)
-                        return res.status(500).json({ error: err.message });
-                    res.status(201).json(row);
-                }
-            );
-        }
+    const insertResult = await pool.query(
+      `INSERT INTO adopciones (id_mascota, id_adoptante, motivos)
+       VALUES ($1, $2, $3)
+       RETURNING id`,
+      [id_mascota, id_adoptante, motivos]
     );
+
+    const result = await pool.query(
+      `${SELECT_ADOPCION} WHERE a.id = $1`,
+      [insertResult.rows[0].id]
+    );
+
+    res.status(201).json(result.rows[0]);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 });
 
 // PUT
-router.put("/:id", (req, res) => {
+router.put("/:id", async (req, res) => {
+  try {
     const { id_mascota, id_adoptante, fecha_solicitud, motivos, fecha_adopcion, observaciones, status } =
-        req.body;
+      req.body;
     const { id } = req.params;
 
-    db.run(
-        `UPDATE adopciones SET
-         id_mascota = ?,
-         id_adoptante = ?,
-         fecha_solicitud = ?,
-         motivos = ?,
-         fecha_adopcion = ?,
-         observaciones = ?,
-         status = ?
-       WHERE id = ?`,
-        [id_mascota, id_adoptante, fecha_solicitud, motivos, fecha_adopcion, observaciones, status, id],
-        function (err) {
-            if (err) return res.status(500).json({ error: err.message });
-            res.json({ mensaje: "Adopción actualizada" });
-        }
+    await pool.query(
+      `UPDATE adopciones SET
+         id_mascota = $1,
+         id_adoptante = $2,
+         fecha_solicitud = $3,
+         motivos = $4,
+         fecha_adopcion = $5,
+         observaciones = $6,
+         status = $7
+       WHERE id = $8`,
+      [id_mascota, id_adoptante, fecha_solicitud, motivos, fecha_adopcion, observaciones, status, id]
     );
+
+    res.json({ mensaje: "Adopción actualizada" });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 });
 
 // DELETE
-router.delete("/:id", (req, res) => {
+router.delete("/:id", async (req, res) => {
+  try {
     const { id } = req.params;
 
-    db.run(`DELETE FROM adopciones WHERE id = ?`, [id], function (err) {
-        if (err) return res.status(500).json({ error: err.message });
-        res.json({ mensaje: "Adopción eliminada" });
-    });
+    await pool.query("DELETE FROM adopciones WHERE id = $1", [id]);
+
+    res.json({ mensaje: "Adopción eliminada" });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 });
 
 module.exports = router;
